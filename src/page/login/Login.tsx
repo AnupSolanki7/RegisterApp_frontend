@@ -26,10 +26,14 @@ const Login = () => {
     axios
       .post("http://192.168.1.104:3000/user/login", loginData)
       .then((res: AxiosResponse) => {
+        if (res.data.data.role == "customer") {
+            toast.error("You are not allowed to login from here")
+          setLoginLoader(false);
+          return;
+        }
         if (res.data.success) {
           toast.success(res.data.message);
           dispatch(userLogin(res.data.data));
-          setLoginLoader(false);
         }
       })
       .catch((err: AxiosError) => {
@@ -50,7 +54,7 @@ const Login = () => {
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
             alt="logo"
           />
-          Registration App
+          User Login
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
